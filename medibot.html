@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The MEDIBOT - Precise Medical Intelligence</title>
+    <link rel="stylesheet" href="style.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .disease-directory {
+            margin-top: 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            max-width: 900px;
+        }
+
+        .dir-pill {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-light);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .dir-pill:hover {
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--primary-main);
+            border-color: var(--primary-main);
+        }
+
+        .manual-loc-container {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 0.3rem;
+            flex: 1;
+        }
+
+        .manual-loc-input {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            width: 100%;
+            font-family: var(--font-body);
+            outline: none;
+        }
+    </style>
+</head>
+
+<body class="dark-theme">
+
+    <!-- Background Elements -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
+
+    <!-- Navigation -->
+    <nav class="glass-navbar">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <i class="fa-solid fa-staff-snake"></i>
+                <span>MEDIBOT</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="#about" class="nav-link">About Us</a>
+                <a href="#why-us" class="nav-link">Why Us</a>
+                <div class="active-users">
+                    <span class="pulse-dot"></span>
+                    <span id="userCount">14,208</span> Users Online
+                </div>
+            </div>
+
+            <div class="auth-section">
+                <button id="loginBtn" class="premium-btn btn-outline">Sign In</button>
+                <div id="userProfile" class="user-profile hidden">
+                    <img src="https://ui-avatars.com/api/?name=User&background=0D8ABC&color=fff" alt="User"
+                        id="userAvatar">
+                    <span id="userNameDisplay">Welcome</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section" id="home">
+            <div class="hero-content">
+                <h1 class="hero-title">Medical Intelligence <br><span class="gradient-text">At Your Fingertips</span>
+                </h1>
+                <p class="hero-subtitle">Instantly access precise medical intelligence and live exact local hospital
+                    mapping seamlessly.</p>
+
+                <div class="search-container">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="diseaseInput" class="search-input"
+                        placeholder="Search ANY short form, local term, or disease (e.g. 'sugar', 'high bp', 'ALS')...">
+                    <button id="searchBtn" class="premium-btn search-btn">Analyze</button>
+                    <!-- Search Suggestions -->
+                    <div id="suggestionsBox" class="suggestions-box hidden"></div>
+                </div>
+
+                <!-- Instant Browse Directory -->
+                <div class="disease-directory" id="directoryMap"></div>
+
+                <div id="searchLoader" class="hidden">
+                    <br>
+                    <p class="gradient-text"><i class="fa-solid fa-spinner fa-spin"></i> Globally Scanning Medical Texts
+                        & Formatting Data cleanly...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Informational Sections -->
+        <section id="about" class="info-section">
+            <div class="info-card glass-panel">
+                <div class="info-icon"><i class="fa-solid fa-microscope"></i></div>
+                <h2>About Us</h2>
+                <p>MEDIBOT is an uncompromising medical platform. We bypass standard search engines to deliver exact,
+                    direct medical intelligence mapped into precise evidence-based fields formatted beautifully. We
+                    physically scan and print the nearest government and private hospitals around your immediate
+                    geolocation purely through native connections.</p>
+            </div>
+            <div class="info-card glass-panel" id="why-us">
+                <div class="info-icon"><i class="fa-solid fa-shield-heart"></i></div>
+                <h2>Why Us</h2>
+                <p>We provide exact data instantly mapped to local terminology (slang/symptoms) without forcing you out
+                    to external references.</p>
+            </div>
+        </section>
+
+        <!-- Results Section (Hidden by default) -->
+        <section id="resultsSection" class="results-section hidden">
+
+            <div class="results-header">
+                <h2 id="resultTitle" class="gradient-text">Disease Name</h2>
+                <div class="result-tabs">
+                    <button class="tab-btn active" data-tab="disease-info">Structured Medical Data</button>
+                    <button class="tab-btn" data-tab="hospital-info">Live Local Hospitals</button>
+                </div>
+            </div>
+
+            <div class="tab-content glass-panel" id="disease-info">
+                <div class="data-grid">
+
+                    <div class="data-card highlight-card" style="grid-column: 1 / -1; margin-bottom: 1rem;">
+                        <h3><i class="fa-solid fa-book-medical"></i> Definition</h3>
+                        <div id="data-definition" style="font-size: 1.1rem; color:#fff; line-height:1.6;"></div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3><i class="fa-solid fa-virus"></i> Etiology & Causes</h3>
+                        <div id="data-etiology"></div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3><i class="fa-solid fa-microscope"></i> Pathology</h3>
+                        <div id="data-pathology"></div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3><i class="fa-solid fa-triangle-exclamation"></i> Risk Factors & Signs</h3>
+                        <div id="data-riskfactors"></div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3><i class="fa-solid fa-stethoscope"></i> Diagnosis</h3>
+                        <div id="data-diagnosis"></div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3><i class="fa-solid fa-pills"></i> Treatment & Mgmt</h3>
+                        <div id="data-treatment"></div>
+                    </div>
+
+                    <div class="data-card">
+                        <h3><i class="fa-solid fa-chart-line"></i> Epidemiological Data</h3>
+                        <div id="data-epidemiological"></div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="tab-content glass-panel hidden" id="hospital-info">
+
+                <div class="location-filters" style="display:flex; flex-wrap:wrap; gap:1rem; align-items:center;">
+                    <button class="filter-btn active" id="btn-local-hospitals"><i class="fa-solid fa-street-view"></i>
+                        Use My GPS</button>
+                    <strong style="color:var(--text-tertiary);">OR</strong>
+                    <div class="manual-loc-container">
+                        <i class="fa-solid fa-city" style="color:var(--text-secondary); margin-left:0.8rem;"></i>
+                        <input type="text" id="manualLocation" class="manual-loc-input"
+                            placeholder="Type an address or city...">
+                        <button class="filter-btn" id="btn-manual-hospitals"
+                            style="margin:0; border:none; background:rgba(0, 229, 255, 0.1); color:var(--primary-main);">Find
+                            Hospitals</button>
+                    </div>
+                </div>
+
+                <div class="hospitals-grid" id="hospitalsContainer">
+                    <p style="color:var(--text-secondary)">Click "Use My GPS" or type an exact address above to securely
+                        scan satellite nodes for exact, genuine hospital networking (Emails, Phones, Exact Addresses
+                        included).</p>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <!-- Login/Register Modal -->
+    <div id="authModal" class="modal-overlay hidden">
+        <div class="modal-content glass-panel">
+            <button class="close-btn" id="closeModal"><i class="fa-solid fa-xmark"></i></button>
+            <div class="modal-header">
+                <h2 id="modalTitle">Access MEDIBOT</h2>
+                <p>Register or login to save preferences.</p>
+            </div>
+
+            <form id="authForm" class="auth-form">
+                <div class="form-group row">
+                    <div class="input-wrapper">
+                        <label>Full Name</label>
+                        <input type="text" id="userName" required placeholder="John Doe">
+                    </div>
+                    <div class="input-wrapper">
+                        <label>Email Address</label>
+                        <input type="email" id="userEmail" required placeholder="john@example.com">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="input-wrapper">
+                        <label>Phone Number</label>
+                        <input type="tel" id="userPhone" required placeholder="+1 234 567 8900">
+                    </div>
+                    <div class="input-wrapper row-small">
+                        <div class="input-mini">
+                            <label>Age</label>
+                            <input type="number" id="userAge" required placeholder="e.g. 35">
+                        </div>
+                        <div class="input-mini">
+                            <label>Gender</label>
+                            <select id="userGender" required>
+                                <option value="">Select</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Full Address</label>
+                    <textarea id="userAddress" required
+                        placeholder="123 Medical Avenue, District, State, Country..."></textarea>
+                </div>
+
+                <button type="submit" class="premium-btn full-width" id="secureLoginBtn">Secure Login /
+                    Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script integrated strictly inline -->
+    <script src="script.js"></script>
+</body>
+
+</html>
